@@ -1,0 +1,1818 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AURA &amp; THREAD — Minimalist Streetwear &amp; Elevated Essentials</title>
+    <meta
+      name="description"
+      content="Contemporary clothing storefront featuring the Autumn/Winter Editorial collection, interactive category filtering, and a slide-out shopping bag."
+    />
+    <meta property="og:title" content="AURA &amp; THREAD — Minimalist Streetwear &amp; Elevated Essentials" />
+    <meta
+      property="og:description"
+      content="Contemporary clothing storefront featuring the Autumn/Winter Editorial collection, interactive category filtering, and a slide-out shopping bag."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              canvas: '#FAF9F6',
+              surface: '#F3F1EC',
+              ink: '#1A1A1A',
+              muted: '#5C5852',
+              terracotta: '#C86D51',
+              'terracotta-dark': '#B05A40',
+              hairline: '#E5E2DC',
+            },
+            fontFamily: {
+              serif: ['"Playfair Display"', 'Georgia', 'serif'],
+              sans: ['"Plus Jakarta Sans"', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            },
+            transitionTimingFunction: {
+              editorial: 'cubic-bezier(0.16, 1, 0.3, 1)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Lucide Icons via CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      body {
+        background-color: #FAF9F6;
+        color: #1A1A1A;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      .text-balance {
+        text-wrap: balance;
+      }
+
+      .tabular-nums {
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* Subtle editorial underline animation */
+      .nav-link {
+        position: relative;
+      }
+      .nav-link::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 1px;
+        background-color: #1A1A1A;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .nav-link:hover::after,
+      .nav-link:focus-visible::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+
+      /* Drawer transitions (compositor only: transform & opacity) */
+      .drawer-backdrop {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .drawer-backdrop.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .drawer-panel {
+        transform: translateX(100%);
+        transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .drawer-backdrop.is-open .drawer-panel {
+        transform: translateX(0);
+      }
+
+      .modal-backdrop {
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 200ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .modal-backdrop.is-open {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .modal-panel {
+        transform: translateY(8px) scale(0.98);
+        opacity: 0;
+        transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+          opacity 220ms cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .modal-backdrop.is-open .modal-panel {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-canvas text-ink selection:bg-terracotta/20 selection:text-ink">
+    <!-- Sticky Navigation Bar (3-Zone Contract) -->
+    <header
+      id="site-header"
+      class="sticky top-0 z-40 bg-canvas/95 backdrop-blur-md border-b border-hairline"
+    >
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 h-16 flex items-center justify-between gap-8">
+        <!-- Zone 1: Brand Wordmark -->
+        <a
+          href="#top"
+          class="font-serif text-lg sm:text-xl font-semibold tracking-tight text-ink whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas rounded-sm"
+        >
+          AURA &amp; THREAD
+        </a>
+
+        <!-- Zone 2: Single-line Editorial Nav Links -->
+        <nav aria-label="Primary navigation" class="hidden md:flex items-center gap-8 text-sm font-medium text-muted">
+          <a
+            href="#collection"
+            data-nav-category="All"
+            class="nav-link hover:text-ink transition-colors whitespace-nowrap shrink-0 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta rounded-sm"
+          >
+            New Arrivals
+          </a>
+          <a
+            href="#collection"
+            class="nav-link hover:text-ink transition-colors whitespace-nowrap shrink-0 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta rounded-sm"
+          >
+            Collections
+          </a>
+          <a
+            href="#lookbook"
+            class="nav-link hover:text-ink transition-colors whitespace-nowrap shrink-0 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta rounded-sm"
+          >
+            Lookbook
+          </a>
+          <a
+            href="#about"
+            class="nav-link hover:text-ink transition-colors whitespace-nowrap shrink-0 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta rounded-sm"
+          >
+            About
+          </a>
+        </nav>
+
+        <!-- Zone 3: Search Toggle + Shopping Cart -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          <button
+            id="search-toggle-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="search-bar-panel"
+            aria-label="Toggle product search"
+            class="inline-flex items-center justify-center w-11 h-11 rounded-md text-ink hover:bg-surface transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <i data-lucide="search" class="w-[18px] h-[18px]" stroke-width="1.75"></i>
+          </button>
+
+          <button
+            id="cart-open-btn"
+            type="button"
+            aria-label="Open shopping bag"
+            class="relative inline-flex items-center gap-2 px-3.5 h-11 rounded-md bg-ink text-canvas hover:bg-terracotta transition-colors duration-200 text-xs sm:text-sm font-medium whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+          >
+            <i data-lucide="shopping-bag" class="w-4 h-4" stroke-width="1.75"></i>
+            <span class="hidden sm:inline">Bag</span>
+            <span
+              id="cart-count-badge"
+              class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-sm bg-terracotta text-canvas text-[11px] font-semibold tabular-nums transition-transform duration-150"
+            >
+              0
+            </span>
+          </button>
+
+          <!-- Mobile menu toggle -->
+          <button
+            id="mobile-menu-btn"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobile-nav-panel"
+            aria-label="Toggle navigation menu"
+            class="md:hidden inline-flex items-center justify-center w-11 h-11 rounded-md text-ink hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <i data-lucide="menu" class="w-5 h-5" stroke-width="1.75"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Expandable Search Bar -->
+      <div
+        id="search-bar-panel"
+        class="hidden border-t border-hairline bg-canvas"
+        role="search"
+      >
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-3 flex items-center gap-3">
+          <i data-lucide="search" class="w-4 h-4 text-muted shrink-0" stroke-width="1.75"></i>
+          <label for="catalog-search-input" class="sr-only">Search garments and essentials</label>
+          <input
+            id="catalog-search-input"
+            type="search"
+            placeholder="Search coats, merino knitwear, French terry, accessories..."
+            class="w-full bg-transparent text-sm text-ink placeholder:text-muted/70 focus:outline-none py-1.5"
+          />
+          <button
+            id="search-clear-btn"
+            type="button"
+            class="hidden text-xs font-medium text-muted hover:text-ink whitespace-nowrap shrink-0 px-2.5 py-1.5 rounded-md hover:bg-surface transition-colors"
+          >
+            Clear
+          </button>
+          <button
+            id="search-close-btn"
+            type="button"
+            aria-label="Close search bar"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-md text-muted hover:text-ink hover:bg-surface transition-colors shrink-0"
+          >
+            <i data-lucide="x" class="w-4 h-4" stroke-width="1.75"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile Navigation Drawer -->
+      <div id="mobile-nav-panel" class="hidden md:hidden border-t border-hairline bg-canvas px-4 py-4">
+        <nav aria-label="Mobile navigation" class="flex flex-col gap-1">
+          <a
+            href="#collection"
+            data-mobile-link
+            class="px-3 py-3 text-sm font-medium text-ink hover:bg-surface rounded-md transition-colors"
+          >
+            New Arrivals
+          </a>
+          <a
+            href="#collection"
+            data-mobile-link
+            class="px-3 py-3 text-sm font-medium text-ink hover:bg-surface rounded-md transition-colors"
+          >
+            Collections
+          </a>
+          <a
+            href="#lookbook"
+            data-mobile-link
+            class="px-3 py-3 text-sm font-medium text-ink hover:bg-surface rounded-md transition-colors"
+          >
+            Lookbook
+          </a>
+          <a
+            href="#about"
+            data-mobile-link
+            class="px-3 py-3 text-sm font-medium text-ink hover:bg-surface rounded-md transition-colors"
+          >
+            About
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="top">
+      <!-- Hero Section: Balanced Split-Screen Editorial -->
+      <section class="border-b border-hairline">
+        <div class="max-w-[1440px] mx-auto grid grid-cols-1 lg:grid-cols-12 items-stretch">
+          <!-- Left Editorial Column -->
+          <div class="lg:col-span-6 px-4 sm:px-8 lg:px-12 py-12 sm:py-16 lg:py-20 flex flex-col justify-between gap-10">
+            <div class="space-y-6 max-w-xl">
+              <p class="text-xs font-medium tracking-[0.14em] uppercase text-muted">
+                Autumn / Winter 2026 &middot; Collection 04
+              </p>
+
+              <h1 class="font-serif text-[clamp(2.5rem,4.5vw,4rem)] leading-[1.08] tracking-tight font-semibold text-ink text-balance">
+                Autumn/Winter Editorial
+              </h1>
+
+              <p class="text-base sm:text-[17px] leading-relaxed text-muted max-w-md">
+                Architectural silhouettes cut from 480gsm unbleached organic terry, double-faced Italian wool, and brushed alpaca. Quiet streetwear engineered for permanence.
+              </p>
+
+              <div class="pt-2 flex flex-wrap items-center gap-3.5">
+                <a
+                  href="#collection"
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-ink text-canvas text-sm font-medium rounded-md hover:bg-terracotta transition-colors duration-200 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+                >
+                  <span>Shop Collection</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4" stroke-width="1.75"></i>
+                </a>
+                <a
+                  href="#lookbook"
+                  class="inline-flex items-center justify-center gap-2 px-6 py-3.5 border border-ink/25 text-ink text-sm font-medium rounded-md hover:border-ink hover:bg-surface transition-colors duration-200 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+                >
+                  <span>Explore Lookbook</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Quiet Unboxed Specification Row -->
+            <div class="pt-8 border-t border-hairline grid grid-cols-3 gap-4 sm:gap-8">
+              <div>
+                <p class="text-xs uppercase tracking-wider text-muted">Fabric Weight</p>
+                <p class="mt-1 text-sm font-semibold text-ink tabular-nums">480gsm Terry</p>
+              </div>
+              <div>
+                <p class="text-xs uppercase tracking-wider text-muted">Wool Provenance</p>
+                <p class="mt-1 text-sm font-semibold text-ink">Biella, Italy</p>
+              </div>
+              <div>
+                <p class="text-xs uppercase tracking-wider text-muted">Complimentary</p>
+                <p class="mt-1 text-sm font-semibold text-ink tabular-nums">Shipping $250+</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Editorial Image Column -->
+          <div class="lg:col-span-6 relative min-h-[380px] sm:min-h-[480px] lg:min-h-[620px] bg-surface border-t lg:border-t-0 lg:border-l border-hairline overflow-hidden">
+            <img
+              src="/images/hero_editorial_look_1794642416881.jpg"
+              alt="Model wearing AURA & THREAD oversized charcoal wool overcoat layered over an oatmeal ribbed knit sweater in a sunlit travertine gallery"
+              referrerpolicy="no-referrer"
+              class="w-full h-full object-cover object-center lg:absolute lg:inset-0"
+              onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+            />
+            <div class="hidden w-full h-full min-h-[380px] flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-surface to-[#E8E4DB] text-muted">
+              <i data-lucide="shirt" class="w-10 h-10 mb-3 opacity-60" stroke-width="1.25"></i>
+              <p class="font-serif text-lg text-ink">Autumn/Winter 2026 Editorial</p>
+              <p class="text-xs mt-1">Structured Charcoal Wool Overcoat &middot; Oatmeal Ribbed Knit</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Dynamic Product Grid Section -->
+      <section id="collection" class="py-16 sm:py-24 border-b border-hairline">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+          <!-- Section Header & Category Filter Controls -->
+          <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-10 border-b border-hairline">
+            <div>
+              <p class="text-xs font-medium tracking-[0.14em] uppercase text-terracotta">
+                Seasonal Release
+              </p>
+              <h2 class="mt-2 font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-ink text-balance">
+                Elevated Essentials &amp; Outerwear
+              </h2>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between lg:justify-end gap-4">
+              <!-- Category Filter Tabs -->
+              <div
+                id="category-tabs"
+                role="tablist"
+                aria-label="Filter products by category"
+                class="inline-flex flex-wrap items-center gap-1 p-1 bg-surface border border-hairline rounded-lg"
+              >
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="true"
+                  data-category="All"
+                  class="filter-tab px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 bg-ink text-canvas"
+                >
+                  All
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-category="Outerwear"
+                  class="filter-tab px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 text-muted hover:text-ink"
+                >
+                  Outerwear
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-category="Essentials"
+                  class="filter-tab px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 text-muted hover:text-ink"
+                >
+                  Essentials
+                </button>
+                <button
+                  type="button"
+                  role="tab"
+                  aria-selected="false"
+                  data-category="Accessories"
+                  class="filter-tab px-4 py-2 text-xs sm:text-sm font-medium rounded-md transition-colors duration-150 whitespace-nowrap shrink-0 text-muted hover:text-ink"
+                >
+                  Accessories
+                </button>
+              </div>
+
+              <span id="product-count-label" class="text-xs font-medium text-muted tabular-nums whitespace-nowrap">
+                8 pieces
+              </span>
+            </div>
+          </div>
+
+          <!-- Active Search Notice (shown only while searching) -->
+          <div
+            id="active-search-banner"
+            class="hidden mt-6 px-4 py-3 bg-surface border border-hairline rounded-md flex items-center justify-between gap-4 text-sm"
+          >
+            <p class="text-muted">
+              Showing results for <span id="active-search-term" class="font-semibold text-ink"></span>
+            </p>
+            <button
+              id="reset-filters-btn"
+              type="button"
+              class="text-xs font-medium text-terracotta hover:text-terracotta-dark underline underline-offset-4 whitespace-nowrap shrink-0"
+            >
+              Reset Filters
+            </button>
+          </div>
+
+          <!-- Product Grid -->
+          <div
+            id="product-grid"
+            class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12"
+          >
+            <!-- Rendered dynamically via Vanilla JS -->
+          </div>
+
+          <!-- Empty State for Search -->
+          <div
+            id="product-empty-state"
+            class="hidden py-20 text-center max-w-md mx-auto space-y-4"
+          >
+            <div class="w-12 h-12 mx-auto rounded-full bg-surface border border-hairline flex items-center justify-center text-muted">
+              <i data-lucide="search-x" class="w-5 h-5" stroke-width="1.5"></i>
+            </div>
+            <h3 class="font-serif text-xl font-semibold text-ink">No matching garments</h3>
+            <p class="text-sm text-muted">
+              Try adjusting your search phrase or return to the full Autumn/Winter collection.
+            </p>
+            <button
+              id="empty-reset-btn"
+              type="button"
+              class="inline-flex items-center justify-center px-5 py-2.5 bg-ink text-canvas text-sm font-medium rounded-md hover:bg-terracotta transition-colors"
+            >
+              View All Pieces
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Editorial Lookbook & Brand Story Bento Section -->
+      <section id="lookbook" class="py-16 sm:py-24 border-b border-hairline">
+        <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
+          <div class="max-w-2xl mb-12">
+            <p class="text-xs font-medium tracking-[0.14em] uppercase text-terracotta">
+              Lookbook &amp; Material Philosophy
+            </p>
+            <h2 class="mt-2 font-serif text-3xl sm:text-4xl font-semibold tracking-tight text-ink text-balance">
+              Cut for longevity, milled without compromise.
+            </h2>
+          </div>
+
+          <!-- Asymmetrical Bento Grid -->
+          <div id="about" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            <!-- Left Wide Column: Atelier Fabric Image + Story Principles -->
+            <div class="lg:col-span-7 flex flex-col gap-6">
+              <!-- Landscape Textile Craft Photo -->
+              <div class="relative aspect-[16/9] bg-surface border border-hairline rounded-lg overflow-hidden group">
+                <img
+                  src="/images/lookbook_atelier_fabric_1794642420996.jpg"
+                  alt="Rolled unbleached merino wool bolts, cotton twill swatches, chalk marks, and pattern shears on an oak atelier workbench"
+                  referrerpolicy="no-referrer"
+                  class="w-full h-full object-cover transition-transform duration-700 ease-editorial group-hover:scale-[1.03]"
+                  onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                />
+                <div class="hidden w-full h-full flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-surface to-[#E8E4DB] text-muted">
+                  <i data-lucide="scissors" class="w-8 h-8 mb-2 opacity-60" stroke-width="1.5"></i>
+                  <p class="font-serif text-base text-ink">Atelier Material Study</p>
+                </div>
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-6 sm:p-8">
+                  <p class="text-xs uppercase tracking-[0.14em] text-canvas/80">
+                    Biella &amp; Porto Ateliers
+                  </p>
+                  <h3 class="mt-1.5 font-serif text-2xl sm:text-3xl font-medium text-canvas text-balance">
+                    Unbleached organic cotton &amp; traceable virgin merino
+                  </h3>
+                  <p class="mt-2 text-sm text-canvas/85 max-w-xl leading-relaxed">
+                    Every fabric bolt is milled in small lots using closed-loop water dyeing and natural enzyme washes, preserving raw hand-feel across decades of wear.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Three Clean Principle Blocks -->
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 flex-1">
+                <article class="p-6 bg-surface/60 border border-hairline rounded-lg flex flex-col justify-between gap-4">
+                  <span class="text-xs font-semibold tracking-wider text-terracotta tabular-nums">01.</span>
+                  <div>
+                    <h3 class="text-base font-semibold text-ink">GOTS Organic Fibers</h3>
+                    <p class="mt-2 text-sm text-muted leading-relaxed">
+                      100% certified organic combed cotton and mulesing-free alpaca blends with zero synthetic stretch.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="p-6 bg-surface/60 border border-hairline rounded-lg flex flex-col justify-between gap-4">
+                  <span class="text-xs font-semibold tracking-wider text-terracotta tabular-nums">02.</span>
+                  <div>
+                    <h3 class="text-base font-semibold text-ink">Architectural Drape</h3>
+                    <p class="mt-2 text-sm text-muted leading-relaxed">
+                      Dropped shoulder blocks, deep double pleats, and 480gsm loopback fleece cut for structured ease.
+                    </p>
+                  </div>
+                </article>
+
+                <article class="p-6 bg-surface/60 border border-hairline rounded-lg flex flex-col justify-between gap-4">
+                  <span class="text-xs font-semibold tracking-wider text-terracotta tabular-nums">03.</span>
+                  <div>
+                    <h3 class="text-base font-semibold text-ink">Small-Batch Runs</h3>
+                    <p class="mt-2 text-sm text-muted leading-relaxed">
+                      Produced in limited seasonal editions of 300 pieces per colorway to eliminate deadstock waste.
+                    </p>
+                  </div>
+                </article>
+              </div>
+            </div>
+
+            <!-- Right Portrait Column: Street Lookbook Campaign -->
+            <div class="lg:col-span-5 flex flex-col bg-surface border border-hairline rounded-lg overflow-hidden">
+              <div class="relative flex-1 min-h-[420px] overflow-hidden group">
+                <img
+                  src="/images/lookbook_autumn_street_1794642421509.jpg"
+                  alt="Editorial model standing beside travertine colonnades in a stone trench coat, oatmeal knit, and charcoal pleated wool trousers"
+                  referrerpolicy="no-referrer"
+                  class="w-full h-full object-cover object-top transition-transform duration-700 ease-editorial group-hover:scale-[1.03]"
+                  onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                />
+                <div class="hidden w-full h-full min-h-[420px] flex flex-col items-center justify-center p-8 text-center bg-gradient-to-br from-surface to-[#E8E4DB] text-muted">
+                  <i data-lucide="camera" class="w-8 h-8 mb-2 opacity-60" stroke-width="1.5"></i>
+                  <p class="font-serif text-base text-ink">Autumn Street Campaign</p>
+                </div>
+              </div>
+              <div class="p-6 sm:p-8 bg-canvas border-t border-hairline flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <p class="text-xs uppercase tracking-[0.12em] text-muted">Look 04 &middot; Milan Colonnade</p>
+                  <p class="mt-1 font-serif text-lg font-semibold text-ink">
+                    Layered Tonal Tailoring
+                  </p>
+                </div>
+                <button
+                  id="lookbook-shop-btn"
+                  type="button"
+                  class="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-ink text-canvas text-xs font-medium rounded-md hover:bg-terracotta transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                >
+                  <span>Shop Essentials</span>
+                  <i data-lucide="arrow-up-right" class="w-3.5 h-3.5" stroke-width="1.75"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer & Newsletter -->
+    <footer class="bg-surface/60">
+      <div class="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-16">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-12 border-b border-hairline">
+          <!-- Brand Summary & Socials -->
+          <div class="md:col-span-4 space-y-4">
+            <a href="#top" class="font-serif text-xl font-semibold tracking-tight text-ink inline-block">
+              AURA &amp; THREAD
+            </a>
+            <p class="text-sm text-muted leading-relaxed max-w-sm">
+              Minimalist streetwear and elevated wardrobe essentials crafted from traceable natural fibers in small European production runs.
+            </p>
+            <div class="pt-2 flex items-center gap-3">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="AURA & THREAD on Instagram"
+                class="inline-flex items-center justify-center w-10 h-10 rounded-md border border-hairline bg-canvas text-ink hover:border-ink hover:text-terracotta transition-colors"
+              >
+                <i data-lucide="instagram" class="w-4 h-4" stroke-width="1.75"></i>
+              </a>
+              <a
+                href="https://pinterest.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="AURA & THREAD on Pinterest"
+                class="inline-flex items-center justify-center w-10 h-10 rounded-md border border-hairline bg-canvas text-ink hover:border-ink hover:text-terracotta transition-colors"
+              >
+                <i data-lucide="bookmark" class="w-4 h-4" stroke-width="1.75"></i>
+              </a>
+              <a
+                href="#lookbook"
+                aria-label="AURA & THREAD Seasonal Journal"
+                class="inline-flex items-center justify-center w-10 h-10 rounded-md border border-hairline bg-canvas text-ink hover:border-ink hover:text-terracotta transition-colors"
+              >
+                <i data-lucide="book-open" class="w-4 h-4" stroke-width="1.75"></i>
+              </a>
+            </div>
+          </div>
+
+          <!-- Navigation Links -->
+          <div class="md:col-span-2 space-y-3">
+            <h3 class="text-xs font-semibold uppercase tracking-[0.12em] text-ink">Collection</h3>
+            <ul class="space-y-2.5 text-sm text-muted">
+              <li>
+                <a href="#collection" data-footer-category="All" class="hover:text-ink transition-colors">All Pieces</a>
+              </li>
+              <li>
+                <a href="#collection" data-footer-category="Outerwear" class="hover:text-ink transition-colors">Outerwear</a>
+              </li>
+              <li>
+                <a href="#collection" data-footer-category="Essentials" class="hover:text-ink transition-colors">Essentials</a>
+              </li>
+              <li>
+                <a href="#collection" data-footer-category="Accessories" class="hover:text-ink transition-colors">Accessories</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Customer Care Links -->
+          <div class="md:col-span-2 space-y-3">
+            <h3 class="text-xs font-semibold uppercase tracking-[0.12em] text-ink">Customer Care</h3>
+            <ul class="space-y-2.5 text-sm text-muted">
+              <li>
+                <button type="button" data-care-modal="shipping" class="hover:text-ink transition-colors text-left">
+                  Shipping &amp; Returns
+                </button>
+              </li>
+              <li>
+                <button type="button" data-care-modal="sizing" class="hover:text-ink transition-colors text-left">
+                  Size &amp; Fit Guide
+                </button>
+              </li>
+              <li>
+                <button type="button" data-care-modal="care" class="hover:text-ink transition-colors text-left">
+                  Garment Care
+                </button>
+              </li>
+              <li>
+                <button type="button" data-care-modal="contact" class="hover:text-ink transition-colors text-left">
+                  Contact Atelier
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Newsletter Form -->
+          <div class="md:col-span-4 space-y-3">
+            <h3 class="text-xs font-semibold uppercase tracking-[0.12em] text-ink">Private Dispatch</h3>
+            <p class="text-sm text-muted leading-relaxed">
+              Receive early access to numbered seasonal drops and atelier lookbooks. No weekly noise.
+            </p>
+            <form id="newsletter-form" novalidate class="pt-1 space-y-2.5">
+              <div class="flex flex-col sm:flex-row gap-2">
+                <label for="newsletter-email" class="sr-only">Email address</label>
+                <input
+                  id="newsletter-email"
+                  type="email"
+                  required
+                  placeholder="you@domain.com"
+                  class="flex-1 px-3.5 py-2.5 bg-canvas border border-hairline rounded-md text-sm text-ink placeholder:text-muted/70 focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink"
+                />
+                <button
+                  type="submit"
+                  class="px-5 py-2.5 bg-ink text-canvas text-sm font-medium rounded-md hover:bg-terracotta transition-colors duration-200 whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+                >
+                  Subscribe
+                </button>
+              </div>
+              <div id="newsletter-feedback" class="hidden items-center gap-2 text-xs font-medium" role="status" aria-live="polite"></div>
+            </form>
+          </div>
+        </div>
+
+        <!-- Bottom Copyright Row -->
+        <div class="pt-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs text-muted">
+          <p>&copy; 2026 AURA &amp; THREAD. All rights reserved.</p>
+          <p>Crafted in limited runs &middot; Biella &amp; Porto</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Slide-Out Shopping Bag Drawer -->
+    <div
+      id="cart-drawer"
+      class="drawer-backdrop fixed inset-0 z-50 bg-ink/40 backdrop-blur-[2px] flex justify-end"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cart-drawer-title"
+      aria-hidden="true"
+    >
+      <div class="drawer-panel w-full max-w-md bg-canvas h-full flex flex-col border-l border-hairline shadow-2xl">
+        <!-- Drawer Header -->
+        <div class="px-6 py-5 border-b border-hairline flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2.5">
+            <h2 id="cart-drawer-title" class="font-serif text-xl font-semibold text-ink">
+              Shopping Bag
+            </h2>
+            <span id="drawer-item-count" class="text-xs font-medium text-muted tabular-nums">
+              (0)
+            </span>
+          </div>
+          <button
+            id="cart-close-btn"
+            type="button"
+            aria-label="Close shopping bag"
+            class="inline-flex items-center justify-center w-10 h-10 rounded-md text-muted hover:text-ink hover:bg-surface transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <i data-lucide="x" class="w-5 h-5" stroke-width="1.75"></i>
+          </button>
+        </div>
+
+        <!-- Complimentary Shipping Progress -->
+        <div id="shipping-progress-wrap" class="px-6 py-3.5 bg-surface/70 border-b border-hairline">
+          <p id="shipping-progress-text" class="text-xs text-ink font-medium"></p>
+          <div class="mt-2 h-1 w-full bg-hairline rounded-full overflow-hidden">
+            <div
+              id="shipping-progress-bar"
+              class="h-full bg-terracotta transition-all duration-300"
+              style="width: 0%"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Cart Body (Swaps between Bag Items, Checkout Form, and Confirmation) -->
+        <div id="cart-body" class="flex-1 overflow-y-auto px-6 py-6">
+          <!-- Bag Items View -->
+          <div id="cart-items-view" class="space-y-5">
+            <!-- Rendered dynamically via JS -->
+          </div>
+
+          <!-- Empty Bag View -->
+          <div id="cart-empty-view" class="hidden h-full min-h-[280px] flex flex-col items-center justify-center text-center py-12 space-y-4">
+            <div class="w-14 h-14 rounded-full bg-surface border border-hairline flex items-center justify-center text-muted">
+              <i data-lucide="shopping-bag" class="w-6 h-6" stroke-width="1.5"></i>
+            </div>
+            <div>
+              <h3 class="font-serif text-lg font-semibold text-ink">Your bag is empty</h3>
+              <p class="mt-1 text-sm text-muted max-w-xs">
+                Explore our Autumn/Winter outerwear, heavyweight fleece, and brushed knitwear.
+              </p>
+            </div>
+            <button
+              id="empty-bag-browse-btn"
+              type="button"
+              class="px-5 py-2.5 bg-ink text-canvas text-xs font-medium rounded-md hover:bg-terracotta transition-colors"
+            >
+              Browse Collection
+            </button>
+          </div>
+
+          <!-- Checkout Verification Form View -->
+          <form id="checkout-form-view" class="hidden space-y-4" novalidate>
+            <div class="flex items-center justify-between pb-3 border-b border-hairline">
+              <h3 class="font-serif text-lg font-semibold text-ink">Shipping Details</h3>
+              <button
+                id="checkout-back-btn"
+                type="button"
+                class="text-xs font-medium text-muted hover:text-ink underline underline-offset-4"
+              >
+                Back to Bag
+              </button>
+            </div>
+
+            <div class="space-y-3.5">
+              <div>
+                <label for="co-name" class="block text-xs font-medium text-ink mb-1">Full Name</label>
+                <input
+                  id="co-name"
+                  type="text"
+                  required
+                  placeholder="Alex Mercer"
+                  class="w-full px-3.5 py-2.5 bg-surface/50 border border-hairline rounded-md text-sm text-ink focus:outline-none focus:border-ink"
+                />
+              </div>
+              <div>
+                <label for="co-email" class="block text-xs font-medium text-ink mb-1">Email Address</label>
+                <input
+                  id="co-email"
+                  type="email"
+                  required
+                  placeholder="alex@domain.com"
+                  class="w-full px-3.5 py-2.5 bg-surface/50 border border-hairline rounded-md text-sm text-ink focus:outline-none focus:border-ink"
+                />
+              </div>
+              <div>
+                <label for="co-address" class="block text-xs font-medium text-ink mb-1">Street Address</label>
+                <input
+                  id="co-address"
+                  type="text"
+                  required
+                  placeholder="412 Mercer St, Apt 4B"
+                  class="w-full px-3.5 py-2.5 bg-surface/50 border border-hairline rounded-md text-sm text-ink focus:outline-none focus:border-ink"
+                />
+              </div>
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <label for="co-city" class="block text-xs font-medium text-ink mb-1">City</label>
+                  <input
+                    id="co-city"
+                    type="text"
+                    required
+                    placeholder="New York"
+                    class="w-full px-3.5 py-2.5 bg-surface/50 border border-hairline rounded-md text-sm text-ink focus:outline-none focus:border-ink"
+                  />
+                </div>
+                <div>
+                  <label for="co-postal" class="block text-xs font-medium text-ink mb-1">Postal Code</label>
+                  <input
+                    id="co-postal"
+                    type="text"
+                    required
+                    placeholder="10013"
+                    class="w-full px-3.5 py-2.5 bg-surface/50 border border-hairline rounded-md text-sm text-ink focus:outline-none focus:border-ink"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div id="checkout-error" class="hidden items-center gap-2 text-xs font-medium text-terracotta-dark" role="alert"></div>
+
+            <div class="pt-3 border-t border-hairline space-y-2 text-sm">
+              <div class="flex justify-between text-muted">
+                <span>Subtotal</span>
+                <span id="co-subtotal" class="tabular-nums text-ink font-medium">$0.00</span>
+              </div>
+              <div class="flex justify-between text-muted">
+                <span>Shipping</span>
+                <span id="co-shipping" class="tabular-nums text-ink font-medium">$0.00</span>
+              </div>
+              <div class="flex justify-between pt-2 border-t border-hairline font-semibold text-ink">
+                <span>Total</span>
+                <span id="co-total" class="tabular-nums">$0.00</span>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              class="w-full py-3.5 bg-ink text-canvas text-sm font-medium rounded-md hover:bg-terracotta transition-colors duration-200"
+            >
+              Confirm Order
+            </button>
+          </form>
+
+          <!-- Order Confirmed View -->
+          <div id="checkout-success-view" class="hidden py-6 space-y-5">
+            <div class="w-12 h-12 rounded-full bg-terracotta/15 text-terracotta-dark flex items-center justify-center">
+              <i data-lucide="check" class="w-6 h-6" stroke-width="2"></i>
+            </div>
+            <div>
+              <p id="order-number-label" class="text-xs font-semibold uppercase tracking-wider text-terracotta-dark tabular-nums"></p>
+              <h3 class="mt-1 font-serif text-2xl font-semibold text-ink">
+                Order Confirmed — Preparing Shipment
+              </h3>
+              <p id="order-recipient-summary" class="mt-2 text-sm text-muted leading-relaxed"></p>
+            </div>
+            <div id="order-receipt-items" class="p-4 bg-surface/70 border border-hairline rounded-md space-y-2 text-xs"></div>
+            <button
+              id="order-continue-btn"
+              type="button"
+              class="w-full py-3 bg-ink text-canvas text-sm font-medium rounded-md hover:bg-terracotta transition-colors"
+            >
+              Continue Exploring
+            </button>
+          </div>
+        </div>
+
+        <!-- Drawer Footer (Subtotal + Proceed to Checkout) -->
+        <div id="cart-footer" class="px-6 py-5 border-t border-hairline bg-canvas space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-muted">Subtotal</span>
+            <span id="cart-subtotal" class="text-lg font-semibold text-ink tabular-nums">$0.00</span>
+          </div>
+          <p class="text-xs text-muted">
+            Taxes and duties calculated at final confirmation.
+          </p>
+          <button
+            id="proceed-checkout-btn"
+            type="button"
+            class="w-full py-3.5 px-6 bg-ink text-canvas text-sm font-medium rounded-md hover:bg-terracotta transition-colors duration-200 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta"
+          >
+            <span>Proceed to Checkout</span>
+            <i data-lucide="arrow-right" class="w-4 h-4" stroke-width="1.75"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Care / Atelier Guide Modal -->
+    <div
+      id="care-modal"
+      class="modal-backdrop fixed inset-0 z-50 bg-ink/40 backdrop-blur-[2px] flex items-center justify-center p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="care-modal-title"
+      aria-hidden="true"
+    >
+      <div class="modal-panel w-full max-w-lg bg-canvas border border-hairline rounded-lg shadow-2xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-hairline flex items-center justify-between gap-4">
+          <h3 id="care-modal-title" class="font-serif text-xl font-semibold text-ink"></h3>
+          <button
+            id="care-modal-close"
+            type="button"
+            aria-label="Close modal"
+            class="inline-flex items-center justify-center w-9 h-9 rounded-md text-muted hover:text-ink hover:bg-surface transition-colors"
+          >
+            <i data-lucide="x" class="w-4 h-4" stroke-width="1.75"></i>
+          </button>
+        </div>
+        <div id="care-modal-content" class="px-6 py-6 text-sm text-muted leading-relaxed space-y-4"></div>
+      </div>
+    </div>
+
+    <!-- Vanilla JavaScript Application State & Interactions -->
+    <script>
+      (function () {
+        'use strict';
+
+        // 1. Complete Product Catalog (8 items across Outerwear, Essentials, Accessories)
+        const PRODUCTS = [
+          {
+            id: 'at-coat-01',
+            title: 'Structured Wool Overcoat',
+            category: 'Outerwear',
+            price: 385,
+            status: 'In Stock',
+            material: '100% Double-Faced Virgin Wool',
+            image: '/images/product_wool_overcoat_1794642416813.jpg',
+            alt: 'Tailored deep charcoal double-faced wool overcoat styled over ivory knitwear',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'M',
+          },
+          {
+            id: 'at-jacket-02',
+            title: 'Cropped Technical Blouson',
+            category: 'Outerwear',
+            price: 260,
+            status: 'Limited Run',
+            material: 'Water-Repellent Japanese Cotton Blend',
+            image: '/images/product_cropped_jacket_1794642417296.jpg',
+            alt: 'Muted terracotta cropped cotton blouson jacket with concealed snap placket',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'M',
+          },
+          {
+            id: 'at-jacket-03',
+            title: 'Waxed Canvas Field Jacket',
+            category: 'Outerwear',
+            price: 295,
+            status: 'In Stock',
+            material: '12oz Scottish Dry-Waxed Canvas',
+            image: '/images/product_field_jacket_1794642417477.jpg',
+            alt: 'Boxy sage-olive waxed canvas chore field jacket layered over an ecru knit',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'L',
+          },
+          {
+            id: 'at-hoodie-04',
+            title: '480gsm Heavyweight Terry Hoodie',
+            category: 'Essentials',
+            price: 165,
+            status: 'In Stock',
+            material: '100% GOTS Organic Loopback Terry',
+            image: '/images/product_terry_hoodie_1794642419383.jpg',
+            alt: 'Oversized bone-white 480gsm organic French terry hoodie with drop shoulders',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'M',
+          },
+          {
+            id: 'at-knit-05',
+            title: 'Ribbed Merino Mock-Neck',
+            category: 'Essentials',
+            price: 190,
+            status: 'In Stock',
+            material: 'Extra-Fine Biella Merino Wool',
+            image: '/images/product_merino_knit_1794642418177.jpg',
+            alt: 'Fine-gauge espresso brown ribbed merino wool mock-neck sweater',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'S',
+          },
+          {
+            id: 'at-trouser-06',
+            title: 'Double-Pleated Wool Trousers',
+            category: 'Essentials',
+            price: 240,
+            status: 'In Stock',
+            material: 'Brushed Flannel Virgin Wool',
+            image: '/images/product_pleated_trousers_1794642418192.jpg',
+            alt: 'Wide-leg double-pleated slate charcoal tailored wool trousers',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'M',
+          },
+          {
+            id: 'at-scarf-07',
+            title: 'Brushed Alpaca Fringed Scarf',
+            category: 'Accessories',
+            price: 125,
+            status: 'Limited Run',
+            material: '78% Suri Alpaca / 22% Merino',
+            image: '/images/product_alpaca_scarf_1794642419984.jpg',
+            alt: 'Terracotta and oatmeal colorblock brushed alpaca wool scarf on travertine',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'M',
+          },
+          {
+            id: 'at-tote-08',
+            title: 'Architectural Canvas & Leather Tote',
+            category: 'Accessories',
+            price: 210,
+            status: 'In Stock',
+            material: '18oz Unbleached Duck & Bridle Leather',
+            image: '/images/product_canvas_tote_1794642421147.jpg',
+            alt: 'Structured unbleached organic canvas tote bag with dark espresso leather straps',
+            sizes: ['S', 'M', 'L', 'XL'],
+            defaultSize: 'M',
+          },
+        ];
+
+        const CARE_CONTENT = {
+          shipping: {
+            title: 'Shipping & Returns',
+            html: `
+              <p>Orders placed before 2:00 PM EST ship the same business day from our New York fulfillment studio in 100% recycled FSC-certified packaging.</p>
+              <div class="p-4 bg-surface border border-hairline rounded-md space-y-1.5 text-ink">
+                <p class="font-semibold">Complimentary Threshold</p>
+                <p class="text-muted text-xs">Free express shipping on all orders of <span class="tabular-nums font-semibold text-ink">$250.00</span> or more. Standard flat-rate shipping is <span class="tabular-nums font-semibold text-ink">$15.00</span>.</p>
+              </div>
+              <p>Unworn garments with original atelier tags may be returned or exchanged within 30 days of delivery at no cost.</p>
+            `,
+          },
+          sizing: {
+            title: 'Size & Fit Guide',
+            html: `
+              <p>AURA &amp; THREAD garments follow a relaxed architectural block. Take your true size for intended drape, or size down for a closer tailored line.</p>
+              <div class="overflow-x-auto border border-hairline rounded-md">
+                <table class="w-full text-left text-xs tabular-nums">
+                  <thead class="bg-surface text-ink border-b border-hairline">
+                    <tr>
+                      <th class="px-3 py-2.5 font-semibold">Size</th>
+                      <th class="px-3 py-2.5 font-semibold">Chest (in)</th>
+                      <th class="px-3 py-2.5 font-semibold">Shoulder (in)</th>
+                      <th class="px-3 py-2.5 font-semibold">Waist (in)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-hairline">
+                    <tr><td class="px-3 py-2 font-medium text-ink">S</td><td class="px-3 py-2">36–38</td><td class="px-3 py-2">18.5</td><td class="px-3 py-2">29–30</td></tr>
+                    <tr><td class="px-3 py-2 font-medium text-ink">M</td><td class="px-3 py-2">39–41</td><td class="px-3 py-2">19.5</td><td class="px-3 py-2">31–32</td></tr>
+                    <tr><td class="px-3 py-2 font-medium text-ink">L</td><td class="px-3 py-2">42–44</td><td class="px-3 py-2">20.5</td><td class="px-3 py-2">33–34</td></tr>
+                    <tr><td class="px-3 py-2 font-medium text-ink">XL</td><td class="px-3 py-2">45–47</td><td class="px-3 py-2">21.5</td><td class="px-3 py-2">35–37</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            `,
+          },
+          care: {
+            title: 'Garment Care',
+            html: `
+              <p>Natural fibers age best with minimal intervention:</p>
+              <ul class="space-y-2 list-disc pl-4">
+                <li><strong class="text-ink">Virgin Wool &amp; Alpaca:</strong> Air after wearing on a wide cedar hanger. Spot-clean or dry-clean sparingly once per season.</li>
+                <li><strong class="text-ink">480gsm Organic Terry:</strong> Machine wash cold inside-out on a gentle cycle with mild detergent. Lay flat on a towel to preserve boxy geometry.</li>
+                <li><strong class="text-ink">Waxed Canvas:</strong> Sponge clean with cold water only; never machine wash or use soap.</li>
+              </ul>
+            `,
+          },
+          contact: {
+            title: 'Contact Atelier',
+            html: `
+              <p>Our client concierge is available Monday through Friday, 9:00 AM – 6:00 PM EST for sizing consultations and bespoke tailoring inquiries.</p>
+              <div class="p-4 bg-surface border border-hairline rounded-md space-y-1 text-xs">
+                <p><span class="text-ink font-semibold">Client Care:</span> concierge@auraandthread.com</p>
+                <p><span class="text-ink font-semibold">Showroom:</span> 118 Mercer Street, New York, NY 10012</p>
+                <p><span class="text-ink font-semibold">Hours:</span> Tue–Sun, 11:00 AM – 7:00 PM</p>
+              </div>
+            `,
+          },
+        };
+
+        // 2. Application State
+        const STORAGE_KEY = 'aura_thread_cart_v1';
+        const FREE_SHIPPING_THRESHOLD = 250;
+        const FLAT_SHIPPING = 15;
+
+        const state = {
+          activeCategory: 'All',
+          searchQuery: '',
+          selectedSizes: PRODUCTS.reduce((acc, p) => {
+            acc[p.id] = p.defaultSize;
+            return acc;
+          }, {}),
+          cart: loadCartFromStorage(),
+          drawerStep: 'bag', // 'bag' | 'checkout' | 'success'
+          lastOrder: null,
+        };
+
+        function loadCartFromStorage() {
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return [];
+            const parsed = JSON.parse(raw);
+            return Array.isArray(parsed) ? parsed : [];
+          } catch {
+            return [];
+          }
+        }
+
+        function saveCartToStorage() {
+          try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state.cart));
+          } catch {
+            // Ignore storage quota / privacy mode errors
+          }
+        }
+
+        function formatCurrency(amount) {
+          return '$' + Number(amount).toFixed(2);
+        }
+
+        // 3. DOM Elements
+        const productGridEl = document.getElementById('product-grid');
+        const productEmptyEl = document.getElementById('product-empty-state');
+        const productCountEl = document.getElementById('product-count-label');
+        const categoryTabEls = document.querySelectorAll('.filter-tab');
+        const activeSearchBannerEl = document.getElementById('active-search-banner');
+        const activeSearchTermEl = document.getElementById('active-search-term');
+
+        const searchToggleBtn = document.getElementById('search-toggle-btn');
+        const searchBarPanel = document.getElementById('search-bar-panel');
+        const searchInput = document.getElementById('catalog-search-input');
+        const searchClearBtn = document.getElementById('search-clear-btn');
+        const searchCloseBtn = document.getElementById('search-close-btn');
+
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileNavPanel = document.getElementById('mobile-nav-panel');
+
+        const cartOpenBtn = document.getElementById('cart-open-btn');
+        const cartCloseBtn = document.getElementById('cart-close-btn');
+        const cartDrawer = document.getElementById('cart-drawer');
+        const cartCountBadge = document.getElementById('cart-count-badge');
+        const drawerItemCount = document.getElementById('drawer-item-count');
+        const cartItemsView = document.getElementById('cart-items-view');
+        const cartEmptyView = document.getElementById('cart-empty-view');
+        const cartFooter = document.getElementById('cart-footer');
+        const cartSubtotalEl = document.getElementById('cart-subtotal');
+        const shippingProgressWrap = document.getElementById('shipping-progress-wrap');
+        const shippingProgressText = document.getElementById('shipping-progress-text');
+        const shippingProgressBar = document.getElementById('shipping-progress-bar');
+
+        const proceedCheckoutBtn = document.getElementById('proceed-checkout-btn');
+        const checkoutFormView = document.getElementById('checkout-form-view');
+        const checkoutBackBtn = document.getElementById('checkout-back-btn');
+        const checkoutErrorEl = document.getElementById('checkout-error');
+        const checkoutSuccessView = document.getElementById('checkout-success-view');
+
+        const newsletterForm = document.getElementById('newsletter-form');
+        const newsletterInput = document.getElementById('newsletter-email');
+        const newsletterFeedback = document.getElementById('newsletter-feedback');
+
+        const careModal = document.getElementById('care-modal');
+        const careModalTitle = document.getElementById('care-modal-title');
+        const careModalContent = document.getElementById('care-modal-content');
+        const careModalClose = document.getElementById('care-modal-close');
+
+        // 4. Filtering & Rendering Product Grid
+        function getFilteredProducts() {
+          const q = state.searchQuery.trim().toLowerCase();
+          return PRODUCTS.filter((product) => {
+            const matchesCategory =
+              state.activeCategory === 'All' || product.category === state.activeCategory;
+            const matchesSearch =
+              !q ||
+              product.title.toLowerCase().includes(q) ||
+              product.category.toLowerCase().includes(q) ||
+              product.material.toLowerCase().includes(q);
+            return matchesCategory && matchesSearch;
+          });
+        }
+
+        function renderProducts() {
+          const filtered = getFilteredProducts();
+          productCountEl.textContent =
+            filtered.length === 1 ? '1 piece' : `${filtered.length} pieces`;
+
+          // Update active search banner
+          if (state.searchQuery.trim()) {
+            activeSearchBannerEl.classList.remove('hidden');
+            activeSearchTermEl.textContent = `"${state.searchQuery.trim()}"`;
+          } else {
+            activeSearchBannerEl.classList.add('hidden');
+          }
+
+          if (filtered.length === 0) {
+            productGridEl.innerHTML = '';
+            productGridEl.classList.add('hidden');
+            productEmptyEl.classList.remove('hidden');
+            if (window.lucide) window.lucide.createIcons();
+            return;
+          }
+
+          productGridEl.classList.remove('hidden');
+          productEmptyEl.classList.add('hidden');
+
+          productGridEl.innerHTML = filtered
+            .map((product) => {
+              const selectedSize = state.selectedSizes[product.id] || product.defaultSize;
+              const sizeButtonsHtml = product.sizes
+                .map((size) => {
+                  const isActive = size === selectedSize;
+                  return `
+                    <button
+                      type="button"
+                      data-size-btn
+                      data-product-id="${product.id}"
+                      data-size="${size}"
+                      aria-pressed="${isActive}"
+                      class="h-8 min-w-[36px] px-2 text-xs font-medium rounded border transition-colors duration-150 tabular-nums focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta ${
+                        isActive
+                          ? 'bg-ink text-canvas border-ink'
+                          : 'bg-canvas text-ink border-hairline hover:border-ink/50'
+                      }"
+                    >
+                      ${size}
+                    </button>
+                  `;
+                })
+                .join('');
+
+              return `
+                <article class="group flex flex-col justify-between transition-transform duration-200 ease-editorial hover:-translate-y-0.5">
+                  <div>
+                    <!-- Product Image Frame -->
+                    <div class="relative aspect-[3/4] bg-surface border border-hairline rounded-md overflow-hidden">
+                      <img
+                        src="${product.image}"
+                        alt="${product.alt}"
+                        loading="lazy"
+                        referrerpolicy="no-referrer"
+                        class="w-full h-full object-cover object-center transition-transform duration-500 ease-editorial group-hover:scale-[1.03]"
+                        onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden');"
+                      />
+                      <div class="hidden w-full h-full flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-surface to-[#E8E4DB] text-muted">
+                        <i data-lucide="shirt" class="w-8 h-8 mb-2 opacity-60" stroke-width="1.5"></i>
+                        <span class="text-xs font-medium text-ink">${product.title}</span>
+                      </div>
+                    </div>
+
+                    <!-- Product Metadata (Zero-Pill Clean Typography) -->
+                    <div class="mt-4 space-y-1">
+                      <div class="flex items-center justify-between gap-2 text-xs uppercase tracking-wider text-muted">
+                        <span>${product.category} &middot; ${product.status}</span>
+                      </div>
+                      <div class="flex items-baseline justify-between gap-3">
+                        <h3 class="text-[15px] sm:text-base font-semibold text-ink leading-snug">
+                          ${product.title}
+                        </h3>
+                        <span class="text-[15px] font-semibold text-ink tabular-nums shrink-0">
+                          ${formatCurrency(product.price)}
+                        </span>
+                      </div>
+                      <p class="text-xs text-muted truncate">${product.material}</p>
+                    </div>
+                  </div>
+
+                  <!-- Size Selector & Add to Cart -->
+                  <div class="mt-4 pt-3 border-t border-hairline space-y-3">
+                    <div class="flex items-center justify-between gap-2">
+                      <span class="text-[11px] uppercase tracking-wider text-muted font-medium">Size</span>
+                      <div class="flex items-center gap-1.5" role="group" aria-label="Select size for ${product.title}">
+                        ${sizeButtonsHtml}
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      data-add-to-cart
+                      data-product-id="${product.id}"
+                      class="w-full py-2.5 px-4 bg-ink text-canvas text-xs sm:text-sm font-medium rounded-md hover:bg-terracotta transition-colors duration-200 flex items-center justify-center gap-2 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta focus-visible:ring-offset-2 focus-visible:ring-offset-canvas"
+                    >
+                      <i data-lucide="plus" class="w-3.5 h-3.5" stroke-width="2"></i>
+                      <span>Add to Cart &mdash; ${selectedSize}</span>
+                    </button>
+                  </div>
+                </article>
+              `;
+            })
+            .join('');
+
+          if (window.lucide) window.lucide.createIcons();
+        }
+
+        function setActiveCategory(category) {
+          state.activeCategory = category;
+          categoryTabEls.forEach((tab) => {
+            const isMatch = tab.getAttribute('data-category') === category;
+            tab.setAttribute('aria-selected', String(isMatch));
+            if (isMatch) {
+              tab.classList.add('bg-ink', 'text-canvas');
+              tab.classList.remove('text-muted', 'hover:text-ink');
+            } else {
+              tab.classList.remove('bg-ink', 'text-canvas');
+              tab.classList.add('text-muted', 'hover:text-ink');
+            }
+          });
+          renderProducts();
+        }
+
+        // 5. Cart State Management & Rendering
+        function getCartTotals() {
+          const totalItems = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+          const subtotal = state.cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+          return { totalItems, subtotal };
+        }
+
+        function addToCart(productId) {
+          const product = PRODUCTS.find((p) => p.id === productId);
+          if (!product) return;
+          const size = state.selectedSizes[productId] || product.defaultSize;
+
+          const existing = state.cart.find(
+            (item) => item.id === product.id && item.size === size
+          );
+
+          if (existing) {
+            existing.quantity += 1;
+          } else {
+            state.cart.push({
+              id: product.id,
+              title: product.title,
+              category: product.category,
+              price: product.price,
+              image: product.image,
+              size: size,
+              quantity: 1,
+            });
+          }
+
+          saveCartToStorage();
+          state.drawerStep = 'bag';
+          renderCart();
+          openCartDrawer();
+        }
+
+        function updateCartQuantity(index, delta) {
+          const item = state.cart[index];
+          if (!item) return;
+          const nextQty = item.quantity + delta;
+          if (nextQty <= 0) {
+            state.cart.splice(index, 1);
+          } else {
+            item.quantity = nextQty;
+          }
+          saveCartToStorage();
+          renderCart();
+        }
+
+        function removeCartItem(index) {
+          state.cart.splice(index, 1);
+          saveCartToStorage();
+          renderCart();
+        }
+
+        function renderCart() {
+          const { totalItems, subtotal } = getCartTotals();
+
+          cartCountBadge.textContent = String(totalItems);
+          drawerItemCount.textContent = `(${totalItems})`;
+          cartSubtotalEl.textContent = formatCurrency(subtotal);
+
+          // Shipping threshold bar
+          if (state.drawerStep === 'success') {
+            shippingProgressWrap.classList.add('hidden');
+          } else {
+            shippingProgressWrap.classList.remove('hidden');
+            const remaining = Math.max(0, FREE_SHIPPING_THRESHOLD - subtotal);
+            const pct = Math.min(100, (subtotal / FREE_SHIPPING_THRESHOLD) * 100);
+            shippingProgressBar.style.width = `${pct}%`;
+            if (subtotal === 0) {
+              shippingProgressText.textContent = `Complimentary express shipping on orders over ${formatCurrency(FREE_SHIPPING_THRESHOLD)}.`;
+            } else if (remaining > 0) {
+              shippingProgressText.textContent = `Add ${formatCurrency(remaining)} more for complimentary express shipping.`;
+            } else {
+              shippingProgressText.textContent = 'Complimentary express shipping unlocked.';
+            }
+          }
+
+          // Toggle Drawer Views
+          cartItemsView.classList.add('hidden');
+          cartEmptyView.classList.add('hidden');
+          checkoutFormView.classList.add('hidden');
+          checkoutSuccessView.classList.add('hidden');
+          cartFooter.classList.add('hidden');
+
+          if (state.drawerStep === 'success' && state.lastOrder) {
+            checkoutSuccessView.classList.remove('hidden');
+            document.getElementById('order-number-label').textContent = `Order #${state.lastOrder.orderNumber}`;
+            document.getElementById('order-recipient-summary').textContent = `Confirmation dispatched to ${state.lastOrder.email}. Shipping to ${state.lastOrder.name}, ${state.lastOrder.address}, ${state.lastOrder.city} ${state.lastOrder.postal}.`;
+            document.getElementById('order-receipt-items').innerHTML =
+              state.lastOrder.items
+                .map(
+                  (it) => `
+                  <div class="flex justify-between gap-2">
+                    <span class="text-ink">${it.quantity} &times; ${it.title} (${it.size})</span>
+                    <span class="tabular-nums font-medium text-ink">${formatCurrency(it.price * it.quantity)}</span>
+                  </div>
+                `
+                )
+                .join('') +
+              `
+              <div class="pt-2 mt-2 border-t border-hairline flex justify-between font-semibold text-ink">
+                <span>Total Charged</span>
+                <span class="tabular-nums">${formatCurrency(state.lastOrder.total)}</span>
+              </div>
+              `;
+            if (window.lucide) window.lucide.createIcons();
+            return;
+          }
+
+          if (state.cart.length === 0) {
+            state.drawerStep = 'bag';
+            cartEmptyView.classList.remove('hidden');
+            if (window.lucide) window.lucide.createIcons();
+            return;
+          }
+
+          if (state.drawerStep === 'checkout') {
+            checkoutFormView.classList.remove('hidden');
+            const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
+            document.getElementById('co-subtotal').textContent = formatCurrency(subtotal);
+            document.getElementById('co-shipping').textContent =
+              shippingCost === 0 ? 'Complimentary' : formatCurrency(shippingCost);
+            document.getElementById('co-total').textContent = formatCurrency(subtotal + shippingCost);
+            if (window.lucide) window.lucide.createIcons();
+            return;
+          }
+
+          // Default 'bag' view with items
+          cartItemsView.classList.remove('hidden');
+          cartFooter.classList.remove('hidden');
+          proceedCheckoutBtn.disabled = false;
+
+          cartItemsView.innerHTML = state.cart
+            .map((item, idx) => {
+              return `
+                <div class="flex gap-4 pb-5 border-b border-hairline last:border-b-0 last:pb-0">
+                  <div class="w-20 h-24 rounded bg-surface border border-hairline overflow-hidden shrink-0">
+                    <img
+                      src="${item.image}"
+                      alt="${item.title}"
+                      referrerpolicy="no-referrer"
+                      class="w-full h-full object-cover"
+                      onerror="this.style.display='none';"
+                    />
+                  </div>
+                  <div class="flex-1 min-w-0 flex flex-col justify-between">
+                    <div class="flex items-start justify-between gap-2">
+                      <div>
+                        <h4 class="text-sm font-semibold text-ink truncate">${item.title}</h4>
+                        <p class="mt-0.5 text-xs text-muted">${item.category} &middot; Size ${item.size}</p>
+                      </div>
+                      <button
+                        type="button"
+                        data-cart-remove="${idx}"
+                        aria-label="Remove ${item.title} size ${item.size}"
+                        class="text-muted hover:text-terracotta-dark p-1 rounded transition-colors shrink-0"
+                      >
+                        <i data-lucide="trash-2" class="w-4 h-4" stroke-width="1.75"></i>
+                      </button>
+                    </div>
+
+                    <div class="mt-3 flex items-center justify-between gap-2">
+                      <div class="inline-flex items-center border border-hairline rounded bg-canvas">
+                        <button
+                          type="button"
+                          data-cart-dec="${idx}"
+                          aria-label="Decrease quantity"
+                          class="w-8 h-8 flex items-center justify-center text-ink hover:bg-surface transition-colors"
+                        >
+                          <i data-lucide="minus" class="w-3.5 h-3.5" stroke-width="1.75"></i>
+                        </button>
+                        <span class="w-8 text-center text-xs font-semibold tabular-nums text-ink">${item.quantity}</span>
+                        <button
+                          type="button"
+                          data-cart-inc="${idx}"
+                          aria-label="Increase quantity"
+                          class="w-8 h-8 flex items-center justify-center text-ink hover:bg-surface transition-colors"
+                        >
+                          <i data-lucide="plus" class="w-3.5 h-3.5" stroke-width="1.75"></i>
+                        </button>
+                      </div>
+
+                      <span class="text-sm font-semibold text-ink tabular-nums">
+                        ${formatCurrency(item.price * item.quantity)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              `;
+            })
+            .join('');
+
+          if (window.lucide) window.lucide.createIcons();
+        }
+
+        // 6. Drawer & Modal Open/Close Handlers
+        function openCartDrawer() {
+          cartDrawer.classList.add('is-open');
+          cartDrawer.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeCartDrawer() {
+          cartDrawer.classList.remove('is-open');
+          cartDrawer.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+          if (state.drawerStep === 'success') {
+            state.drawerStep = 'bag';
+            renderCart();
+          }
+        }
+
+        function openCareModal(key) {
+          const entry = CARE_CONTENT[key];
+          if (!entry) return;
+          careModalTitle.textContent = entry.title;
+          careModalContent.innerHTML = entry.html;
+          careModal.classList.add('is-open');
+          careModal.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+
+        function closeCareModal() {
+          careModal.classList.remove('is-open');
+          careModal.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+
+        // 7. Event Listeners
+        categoryTabEls.forEach((tab) => {
+          tab.addEventListener('click', () => {
+            setActiveCategory(tab.getAttribute('data-category'));
+          });
+        });
+
+        // Delegated clicks inside Product Grid (size pills + Add to Cart)
+        productGridEl.addEventListener('click', (event) => {
+          const sizeBtn = event.target.closest('[data-size-btn]');
+          if (sizeBtn) {
+            const productId = sizeBtn.getAttribute('data-product-id');
+            const size = sizeBtn.getAttribute('data-size');
+            state.selectedSizes[productId] = size;
+            renderProducts();
+            return;
+          }
+
+          const addBtn = event.target.closest('[data-add-to-cart]');
+          if (addBtn) {
+            const productId = addBtn.getAttribute('data-product-id');
+            addToCart(productId);
+          }
+        });
+
+        // Delegated clicks inside Cart Drawer (qty +/- and remove)
+        cartItemsView.addEventListener('click', (event) => {
+          const decBtn = event.target.closest('[data-cart-dec]');
+          if (decBtn) {
+            updateCartQuantity(Number(decBtn.getAttribute('data-cart-dec')), -1);
+            return;
+          }
+          const incBtn = event.target.closest('[data-cart-inc]');
+          if (incBtn) {
+            updateCartQuantity(Number(incBtn.getAttribute('data-cart-inc')), 1);
+            return;
+          }
+          const removeBtn = event.target.closest('[data-cart-remove]');
+          if (removeBtn) {
+            removeCartItem(Number(removeBtn.getAttribute('data-cart-remove')));
+          }
+        });
+
+        cartOpenBtn.addEventListener('click', () => {
+          state.drawerStep = 'bag';
+          renderCart();
+          openCartDrawer();
+        });
+
+        cartCloseBtn.addEventListener('click', closeCartDrawer);
+        cartDrawer.addEventListener('click', (e) => {
+          if (e.target === cartDrawer) closeCartDrawer();
+        });
+
+        document.getElementById('empty-bag-browse-btn').addEventListener('click', () => {
+          closeCartDrawer();
+          document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        // Checkout flow inside Cart Drawer
+        proceedCheckoutBtn.addEventListener('click', () => {
+          if (state.cart.length === 0) return;
+          state.drawerStep = 'checkout';
+          renderCart();
+        });
+
+        checkoutBackBtn.addEventListener('click', () => {
+          state.drawerStep = 'bag';
+          checkoutErrorEl.classList.add('hidden');
+          renderCart();
+        });
+
+        checkoutFormView.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const name = document.getElementById('co-name').value.trim();
+          const email = document.getElementById('co-email').value.trim();
+          const address = document.getElementById('co-address').value.trim();
+          const city = document.getElementById('co-city').value.trim();
+          const postal = document.getElementById('co-postal').value.trim();
+
+          const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+          if (!name || !emailValid || !address || !city || !postal) {
+            checkoutErrorEl.textContent = 'Please complete all shipping fields with a valid email address.';
+            checkoutErrorEl.classList.remove('hidden');
+            checkoutErrorEl.classList.add('flex');
+            return;
+          }
+
+          checkoutErrorEl.classList.add('hidden');
+          const { subtotal } = getCartTotals();
+          const shippingCost = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : FLAT_SHIPPING;
+
+          state.lastOrder = {
+            orderNumber: 'AT-' + String(Math.floor(4100 + Math.random() * 5800)),
+            name,
+            email,
+            address,
+            city,
+            postal,
+            items: state.cart.map((item) => ({ ...item })),
+            total: subtotal + shippingCost,
+          };
+
+          state.cart = [];
+          saveCartToStorage();
+          state.drawerStep = 'success';
+          checkoutFormView.reset();
+          renderCart();
+        });
+
+        document.getElementById('order-continue-btn').addEventListener('click', () => {
+          closeCartDrawer();
+        });
+
+        // Search Bar Toggle & Live Filtering
+        function toggleSearchBar(forceOpen) {
+          const isCurrentlyOpen = !searchBarPanel.classList.contains('hidden');
+          const shouldOpen = typeof forceOpen === 'boolean' ? forceOpen : !isCurrentlyOpen;
+          if (shouldOpen) {
+            searchBarPanel.classList.remove('hidden');
+            searchToggleBtn.setAttribute('aria-expanded', 'true');
+            setTimeout(() => searchInput.focus(), 50);
+          } else {
+            searchBarPanel.classList.add('hidden');
+            searchToggleBtn.setAttribute('aria-expanded', 'false');
+          }
+        }
+
+        searchToggleBtn.addEventListener('click', () => toggleSearchBar());
+        searchCloseBtn.addEventListener('click', () => toggleSearchBar(false));
+
+        searchInput.addEventListener('input', (e) => {
+          state.searchQuery = e.target.value;
+          searchClearBtn.classList.toggle('hidden', !state.searchQuery.trim());
+          renderProducts();
+          if (state.searchQuery.trim()) {
+            const collectionEl = document.getElementById('collection');
+            const rect = collectionEl.getBoundingClientRect();
+            if (rect.top > window.innerHeight * 0.7) {
+              collectionEl.scrollIntoView({ behavior: 'smooth' });
+            }
+          }
+        });
+
+        function clearAllFilters() {
+          state.searchQuery = '';
+          searchInput.value = '';
+          searchClearBtn.classList.add('hidden');
+          setActiveCategory('All');
+        }
+
+        searchClearBtn.addEventListener('click', () => {
+          state.searchQuery = '';
+          searchInput.value = '';
+          searchClearBtn.classList.add('hidden');
+          renderProducts();
+          searchInput.focus();
+        });
+
+        document.getElementById('reset-filters-btn').addEventListener('click', clearAllFilters);
+        document.getElementById('empty-reset-btn').addEventListener('click', clearAllFilters);
+
+        // Mobile Navigation Drawer
+        mobileMenuBtn.addEventListener('click', () => {
+          const isOpen = !mobileNavPanel.classList.contains('hidden');
+          mobileNavPanel.classList.toggle('hidden', isOpen);
+          mobileMenuBtn.setAttribute('aria-expanded', String(!isOpen));
+        });
+
+        document.querySelectorAll('[data-mobile-link]').forEach((link) => {
+          link.addEventListener('click', () => {
+            mobileNavPanel.classList.add('hidden');
+            mobileMenuBtn.setAttribute('aria-expanded', 'false');
+          });
+        });
+
+        // Lookbook & Footer Quick Category Links
+        document.getElementById('lookbook-shop-btn').addEventListener('click', () => {
+          setActiveCategory('Essentials');
+          document.getElementById('collection').scrollIntoView({ behavior: 'smooth' });
+        });
+
+        document.querySelectorAll('[data-footer-category]').forEach((link) => {
+          link.addEventListener('click', () => {
+            setActiveCategory(link.getAttribute('data-footer-category'));
+          });
+        });
+
+        // Customer Care Modal Triggers
+        document.querySelectorAll('[data-care-modal]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            openCareModal(btn.getAttribute('data-care-modal'));
+          });
+        });
+
+        careModalClose.addEventListener('click', closeCareModal);
+        careModal.addEventListener('click', (e) => {
+          if (e.target === careModal) closeCareModal();
+        });
+
+        // Global Escape Key for Drawers & Modals
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            if (cartDrawer.classList.contains('is-open')) closeCartDrawer();
+            if (careModal.classList.contains('is-open')) closeCareModal();
+            if (!searchBarPanel.classList.contains('hidden')) toggleSearchBar(false);
+          }
+        });
+
+        // Newsletter Form Validation & Feedback
+        newsletterForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = newsletterInput.value.trim();
+          const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+          newsletterFeedback.classList.remove('hidden', 'text-terracotta-dark', 'text-ink');
+          newsletterFeedback.classList.add('flex');
+
+          if (!isValid) {
+            newsletterFeedback.classList.add('text-terracotta-dark');
+            newsletterFeedback.innerHTML =
+              '<i data-lucide="alert-circle" class="w-3.5 h-3.5 shrink-0" stroke-width="2"></i><span>Please enter a valid email address.</span>';
+            newsletterInput.focus();
+          } else {
+            newsletterFeedback.classList.add('text-ink');
+            newsletterFeedback.innerHTML =
+              '<i data-lucide="check-circle-2" class="w-3.5 h-3.5 text-terracotta shrink-0" stroke-width="2"></i><span>Thank you. You are subscribed to the AURA &amp; THREAD dispatch.</span>';
+            newsletterInput.value = '';
+          }
+
+          if (window.lucide) window.lucide.createIcons();
+        });
+
+        // 8. Initial Render
+        renderProducts();
+        renderCart();
+        if (window.lucide) window.lucide.createIcons();
+      })();
+    </script>
+  </body>
+</html>

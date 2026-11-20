@@ -1,0 +1,6 @@
+{
+  "name": "AURA & THREAD — Minimalist Streetwear & Elevated Essentials",
+  "description": "Contemporary clothing storefront featuring the Autumn/Winter Editorial collection, interactive category filtering, and a slide-out shopping bag.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
